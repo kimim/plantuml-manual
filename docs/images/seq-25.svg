@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="323px" preserveAspectRatio="none" style="width:154px;height:323px;background:#FFFFFF;" version="1.1" viewBox="0 0 154 323" width="154px" zoomAndPan="magnify"><defs/><g><line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="27" x2="27" y1="82.6094" y2="240.9453"/><line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="77.5" x2="77.5" y1="82.6094" y2="240.9453"/><rect fill="#E2E2F0" height="31.6094" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="44" x="5" y="50"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="30" x="12" y="71.5332">Alice</text><rect fill="#E2E2F0" height="31.6094" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="44" x="5" y="239.9453"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="30" x="12" y="261.4785">Alice</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="25" x="62.5" y="79.5332">Bob</text><ellipse cx="78" cy="13.5" fill="#E2E2F0" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/><path d="M78,21.5 L78,48.5 M65,29.5 L91,29.5 M78,48.5 L65,63.5 M78,48.5 L91,63.5 " fill="none" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="25" x="62.5" y="254.4785">Bob</text><ellipse cx="78" cy="266.0547" fill="#E2E2F0" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/><path d="M78,274.0547 L78,301.0547 M65,282.0547 L91,282.0547 M78,301.0547 L65,316.0547 M78,301.0547 L91,316.0547 " fill="none" style="stroke:#181818;stroke-width:0.5;"/><rect height="41.4453" style="stroke:#000000;stroke-width:1.5;fill:none;" width="94.5" x="2" y="92.6094"/><path d="M2,92.6094 L64,92.6094 L64,100.6094 L54,110.6094 L2,110.6094 L2,92.6094 " fill="#EEEEEE" style="stroke:#000000;stroke-width:2.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacing" textLength="17" x="15" y="108.1045">ref</text><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="16" x="41.25" y="127.0664">init</text><polygon fill="#181818" points="66,157.4063,76,161.4063,66,165.4063,70,161.4063" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="27" x2="72" y1="161.4063" y2="161.4063"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="27" x="34" y="156.5498">hello</text><rect height="56.5391" style="stroke:#000000;stroke-width:1.5;fill:none;" width="89" x="59.5" y="169.4063"/><path d="M59.5,169.4063 L121.5,169.4063 L121.5,177.4063 L111.5,187.4063 L59.5,187.4063 L59.5,169.4063 " fill="#EEEEEE" style="stroke:#000000;stroke-width:2.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacing" textLength="17" x="72.5" y="184.9014">ref</text><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="81" x="63.5" y="203.8633">This can be on</text><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="70" x="69" y="218.957">several lines</text><!--MD5=[dbf04d1a01e51fc4a85fd5fa9b7ef785]
+@startuml
+participant Alice
+actor Bob
+
+ref over Alice, Bob : init
+Alice -> Bob : hello
+ref over Bob
+This can be on
+several lines
+end ref
+@enduml
+
+PlantUML version 1.2022.3beta3(Unknown compile time)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

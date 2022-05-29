@@ -1,0 +1,1588 @@
+#+TITLE: Drawing UML with PlantUML in Org
+#+SUBTITLE: PlantUML Language Reference Guide
+
+*PlantUML* is a component that allows to quickly write:
+- Sequence diagram
+- Usecase diagram
+- Class diagram
+- Object diagram
+- Activity diagram
+- Component diagram
+- Deployment diagram
+- State diagram
+- Timing diagram
+
+
+The following non-UML diagrams are also supported:
+- JSON Data
+- YAML Data
+- Network diagram (nwdiag)
+- Wireframe graphical interface
+- Archimate diagram
+- Specification and Description Language (SDL)
+- Ditaa diagram
+- Gantt diagram
+- MindMap diagram
+- Work Breakdown Structure diagram
+- Mathematic with AsciiMath or JLaTeXMath notation
+- Entity Relationship diagram
+
+
+Diagrams are defined using a simple and intuitive language.
+
+Current version:
+
+#+begin_src emacs-lisp :exports outputs :eval no-export
+(shell-command-to-string
+ (concat
+  "java -jar " org-plantuml-jar-path " -version"))
+#+end_src
+
+#+RESULTS:
+#+begin_example
+PlantUML version 1.2022.3beta3 (Unknown compile time)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+
+PLANTUML_LIMIT_SIZE: 4096
+
+Dot version: dot - graphviz version 2.44.1 (20200629.0846)
+Installation seems OK. File generation OK
+#+end_example
+
+* Sequence Diagram
+** Basic examples
+The sequence ~->~ is used to draw a message between two
+participants. Participants do not have to be explicitly declared.
+
+To have a dotted arrow, you use ~-->~
+
+It is also possible to use ~<-~ and ~<--~. That does not change the
+drawing, but may improve readability.  Note that this is only true for
+sequence diagrams, rules are different for the other diagrams.
+
+#+begin_src plantuml :output-dir images :file seq-01.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+Alice -> Bob: Authentication Request
+Bob --> Alice: Authentication Response
+Alice -> Bob: Another authentication Request
+Alice <-- Bob: Another authentication Response
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-01.svg]]
+
+** Declaring participant
+If the keyword ~participant~ is used to declare a participant, more control on that participant is possible.
+
+The order of declaration will be the (default) *order of display*.
+
+Using these other keywords to declare participants will *change the shape* of the participant representation:
+- actor
+- boundary
+- control
+- entity
+- database
+- collections
+- queue
+
+
+#+begin_src plantuml :output-dir images :file seq-02.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+participant participant as Foo
+actor actor as Foo1
+boundary boundary as Foo2
+control control as Foo3
+entity entity as Foo4
+database database as Foo5
+collections collections as Foo6
+queue queue as Foo7
+
+Foo -> Foo1 : To actor
+Foo -> Foo2 : To boundary
+Foo -> Foo3 : To control
+Foo -> Foo4 : To entity
+Foo -> Foo5 : To database
+Foo -> Foo6 : To collections
+Foo -> Foo7: To queue
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-02.svg]]
+
+Rename a participant using the ~as~ keyword.
+
+You can also change the background color of actor or participant.
+
+#+begin_src plantuml :output-dir images :file seq-03.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+actor Bob #red
+' The only difference between actor
+'and participant is the drawing
+participant Alice
+participant "I have a really\nlong name" as L #99FF99
+/' You can also declare:
+participant L as "I have a really\nlong name"
+#99FF99
+'/
+Alice->Bob: Authentication Request
+Bob->Alice: Authentication Response
+Bob->L: Log transaction
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-03.svg]]
+
+You can use the ~order~ keyword to customize the display order of
+participants.
+
+#+begin_src plantuml :output-dir images :file seq-04.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+participant Last order 30
+participant Middle order 20
+participant First order 10
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-04.svg]]
+
+** Use non-letters in participants
+You can use quotes to define participants. And you can use the as
+keyword to give an alias to those participants.
+
+#+begin_src plantuml :output-dir images :file seq-05.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+Alice -> "Bob()" : Hello
+"Bob()" -> "This is very\nlong" as Long
+' You can also declare:
+' "Bob()" -> Long as "This is very\nlong"
+Long --> "Bob()" : ok
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-05.svg]]
+
+** Message to Self
+A participant can send a message to itself.  It is also possible to
+have multi-line using .
+
+#+begin_src plantuml :output-dir images :file seq-06.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+'sequence no length than 20
+Alice -> Alice: This is a signal to self.\nIt also demonstrates\nmultiline \ntext
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-06.svg]]
+
+** Text alignment
+*** Text of response message below the arrow
+You can put the text of the response message below the arrow, with the
+~skinparam responseMessageBelowArrow~ true command. see [[*Text Alignment]]
+
+#+begin_src plantuml :output-dir images :file seq-07.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+skinparam responseMessageBelowArrow true
+Bob -> Alice : hello
+Alice -> Bob : ok
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-07.svg]]
+
+
+** Change arrow style
+You can change arrow style by several ways:
+- add a final ~x~ to denote a lost message
+- use ~\~ or ~/~ instead of ~<~ or ~>~ to have only the bottom or top part of
+  the arrow
+- repeat the arrow head (for example, ~>>~ or ~//~) head to have a thin drawing
+- use ~--~ instead of ~-~ to have a dotted arrow
+- add a final ~o~ at arrow head
+- use bidirectional arrow ~<->~
+
+#+begin_src plantuml :output-dir images :file seq-08.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+Bob ->x Alice
+Bob -> Alice
+Bob ->> Alice
+Bob -\ Alice
+Bob \\- Alice
+Bob //-- Alice
+Bob ->o Alice
+Bob o\\-- Alice
+Bob <-> Alice
+Bob <->o Alice
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-08.svg]]
+** Change arrow color
+You can change the color of individual arrows using the following notation:
+
+#+begin_src plantuml :output-dir images :file seq-09.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+Bob -[#red]> Alice : hello
+Alice --[#0000FF]>Bob : ok
+Alice -[#00ff00]->Bob : ok
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-09.svg]]
+
+** Message sequence numbering
+The keyword ~autonumber~ is used to automatically add number to
+messages.
+
+#+begin_src plantuml :output-dir images :file seq-10.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+autonumber
+Bob -> Alice : Authentication Request
+Bob <- Alice : Authentication Response
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-10.svg]]
+
+You can specify a start number with ~autonumber 15~ , and also an
+increment with ~autonumber 40 10~.
+
+#+begin_src plantuml :output-dir images :file seq-11.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+autonumber
+Bob -> Alice : Authentication Request
+Bob <- Alice : Authentication Response
+autonumber 15
+Bob -> Alice : Another authentication Request
+Bob <- Alice : Another authentication Response
+autonumber 40 10
+Bob -> Alice : Yet another authentication Request
+Bob <- Alice : Yet another authentication Response
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-11.svg]]
+
+You can specify a format for your number by using between
+double-quote.
+
+The formatting is done with the Java class ~DecimalFormat~ (~0~ means
+digit, ~#~ means digit and zero if absent).
+
+You can use some html tag in the format.
+
+#+begin_src plantuml :output-dir images :file seq-12.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+autonumber "<b>[000] "
+Bob -> Alice : Authentication Request
+Bob <- Alice : Authentication Response
+autonumber 15 "<b>(<u>##</u>) "
+Bob -> Alice : Another authentication Request
+Bob <- Alice : Another authentication Response
+autonumber 40 10 "<font color=red><b>Message 0 "
+Bob -> Alice : Yet another authentication Request
+Bob <- Alice : Yet another authentication Response
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-12.svg]]
+
+You can also use ~autonumber stop~ and ~autonumber resume inc fmt~ to
+respectively pause and resume automatic numbering.
+
+#+begin_src plantuml :output-dir images :file seq-13.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+autonumber 10 10 "<b>[000] "
+Bob -> Alice : Authentication Request
+Bob <- Alice : Authentication Response
+autonumber stop
+Bob -> Alice : dummy
+autonumber resume "<font color=red><b>Message 0 "
+Bob -> Alice : Yet another authentication Request
+Bob <- Alice : Yet another authentication Response
+autonumber stop
+Bob -> Alice : dummy
+autonumber resume 1 "<font color=blue><b>Message 0 "
+Bob -> Alice : Yet another authentication Request
+Bob <- Alice : Yet another authentication Response
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-13.svg]]
+
+** Page Title, Header and Footer
+The /title/ keyword is used to add a title to the page.
+
+Pages can display headers and footers using /header/ and /footer/.
+
+#+begin_src plantuml :output-dir images :file seq-14.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+
+header Page Header
+footer Page %page% of %lastpage%
+
+title Example Title
+
+Alice -> Bob : message 1
+Alice -> Bob : message 2
+
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-14.svg]]
+
+** Splitting diagrams
+The /newpage/ keyword is used to split a diagram into several images.
+
+You can put a title for the new page just after the /newpage/
+keyword. This title overrides the previously specified title if any.
+
+This is very handy with Word to print long diagram on several pages.
+
+(Note: this really does work. Only the first page is shown below, but it is a display artifact.)
+
+#+begin_src plantuml :output-dir images :file seq-15.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+Alice -> Bob : message 1
+Alice -> Bob : message 2
+newpage
+Alice -> Bob : message 3
+Alice -> Bob : message 4
+newpage A title for the\nlast page
+Alice -> Bob : message 5
+Alice -> Bob : message 6
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-15.svg]]
+
+** Grouping message
+It is possible to group messages together using the following keywords:
+- /alt/else/
+- /opt/
+- /loop/
+- /par/
+- /break/
+- /critical/
+- /group/, followed by a text to be displayed
+
+It is possible to add a text that will be displayed into the header
+(for /group/, see next paragraph 'Secondary group label').
+
+The /end/ keyword is used to close the group.
+
+Note that it is possible to nest groups.
+
+#+begin_src plantuml :output-dir images :file seq-16.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+Alice -> Bob: Authentication Request
+alt successful case
+        Bob -> Alice: Authentication Accepted
+else some kind of failure
+        Bob -> Alice: Authentication Failure
+        group My own label
+                Alice -> Log : Log attack start
+                loop 1000 times
+                        Alice -> Bob: DNS Attack
+                end
+                Alice -> Log : Log attack end
+        end
+else Another type of failure
+        Bob -> Alice: Please repeat
+end
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-16.svg]]
+
+** Secondary group label
+For /group/, it is possible to add, between /[/ and /]/, a secondary text or
+label that will be displayed into the header.
+
+#+begin_src plantuml :output-dir images :file seq-17.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+Alice -> Bob: Authentication Request
+Bob -> Alice: Authentication Failure
+group My own label [My own label 2]
+        Alice -> Log : Log attack start
+        loop 1000 times
+                Alice -> Bob: DNS Attack
+        end
+        Alice -> Log : Log attack end
+end
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-17.svg]]
+
+** Notes on messages
+It is possible to put notes on message using the *note left* or *note
+right* keywords /just after the message/.
+
+You can have a multi-line note using the *end note* keywords.
+
+#+begin_src plantuml :output-dir images :file seq-18.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+Alice->Bob : hello
+note left: this is a first note
+Bob->Alice : ok
+note right: this is another note
+Bob->Bob : I am thinking
+note left
+a note
+can also be defined
+on several lines
+end note
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-18.svg]]
+
+** Some other notes
+It is also possible to place notes relative to participant with *note
+left of*, *note right* of or *note over* keywords.
+
+It is possible to highlight a note by changing its background color.
+
+You can also have a multi-line note using the *end note* keywords.
+
+#+begin_src plantuml :output-dir images :file seq-19.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+participant Alice
+participant Bob
+note left of Alice #aqua
+This is displayed
+left of Alice.
+end note
+
+note right of Alice: This is displayed right of Alice.
+
+note over Alice: This is displayed over Alice.
+
+note over Alice, Bob #FFAAAA: This is displayed\n over Bob and Alice.
+
+note over Bob, Alice #yellow
+This is yet another
+example of
+a long note.
+end note
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-19.svg]]
+
+** Changing notes shape [hnote, rnote]
+You can use *hnote* and *rnote* keywords to change note shapes:
+- *hnote* for hexagonal note;
+- *rnote* for rectangle note.
+
+#+begin_src plantuml :output-dir images :file seq-20.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+caller -> server : conReq
+hnote over caller : idle
+caller <- server : conConf
+rnote over server
+"r" as rectangle
+"h" as hexagon
+end rnote
+rnote over server
+this is
+on several
+lines
+end rnote
+hnote over caller
+this is
+on several
+lines
+end hnote
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-20.svg]]
+
+** Note over all participants [across]
+You can directly make a note over all participants, with the syntax:
+- *note across: note_description*
+
+#+begin_src plantuml :output-dir images :file seq-21.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+Alice->Bob:m1
+Bob->Charlie:m2
+note over Alice, Charlie
+        Old method for note over all part. with:
+        ""note over //FirstPart, LastPart//"".
+end note
+note across: New method with:\n""note across""
+Bob->Alice
+hnote across: Note across all part.
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-21.svg]]
+
+** Several notes aligned at the same level [/]
+You can make several notes aligned at the same level, with the syntax /:
+- without / (by default, the notes are not aligned)
+
+#+begin_src plantuml :output-dir images :file seq-21.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+note over Alice : initial state of Alice
+note over Bob : initial state of Bob
+Bob -> Alice : hello
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-21.svg]]
+
+- with / (the notes are aligned)
+
+#+begin_src plantuml :output-dir images :file seq-22.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+note over Alice : initial state of Alice
+/ note over Bob : initial state of Bob
+Bob -> Alice : hello
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-22.svg]]
+
+** Creole and HTML
+It is also possible to use creole formatting:
+
+#+begin_src plantuml :output-dir images :file seq-23.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+participant Alice
+participant "The **Famous** Bob" as Bob
+Alice -> Bob : hello --there--
+... Some ~~long delay~~ ...
+Bob -> Alice : ok
+note left
+This is **bold**
+This is //italics//
+This is ""monospaced""
+This is --stroked--
+This is __underlined__
+This is ~~waved~~
+end note
+Alice -> Bob : A //well formatted//  message
+note right of Alice
+This is <back:cadetblue><size:18>displayed</size></back>
+__left of__ Alice.
+end note
+note left of Bob
+<u:red>This</u> is <color #118888>displayed</color>
+**<color purple>left of</color>  <s:red>Alice</strike> Bob**.
+end note
+note over Alice, Bob
+<w:#FF33FF>This is hosted</w> by <img github.png>
+end note
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-23.svg]]
+
+** Divider or separator
+If you want, you can split a diagram using *==* separator to divide your
+diagram into logical steps.
+
+#+begin_src plantuml :output-dir images :file seq-24.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+== Initialization ==
+Alice -> Bob: Authentication Request
+Bob --> Alice: Authentication Response
+
+== Repetition ==
+Alice -> Bob: Another authentication Request
+Alice <-- Bob: another authentication Response
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-24.svg]]
+
+** Reference
+You can use reference in a diagram, using the keyword *ref over*.
+
+#+begin_src plantuml :output-dir images :file seq-25.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+participant Alice
+actor Bob
+
+ref over Alice, Bob : init
+Alice -> Bob : hello
+ref over Bob
+This can be on
+several lines
+end ref
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-25.svg]]
+
+** Delay
+You can use *...* to indicate a delay in the diagram. And it is also
+possible to put a message with this delay.
+
+#+begin_src plantuml :output-dir images :file seq-26.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+Alice -> Bob: Authentication Request
+...
+Bob --> Alice: Authentication Response
+...5 minutes later...
+Bob --> Alice: Good Bye !
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-26.svg]]
+
+** Text wrapping
+To break long messages, you can manually add in your text.  Another
+option is to use *maxMessageSize* setting:
+
+#+begin_src plantuml :output-dir images :file seq-27.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+skinparam maxMessageSize 50
+participant a
+participant b
+a -> b :this\nis\nmanually\ndone
+a -> b :this is a very long message on several words
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-27.svg]]
+
+** Space
+You can use *|||* to indicate some spacing in the diagram.  It is also
+possible to specify a number of pixel to be used.
+
+#+begin_src plantuml :output-dir images :file seq-28.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+Alice -> Bob: message 1
+Bob --> Alice: ok
+|||
+Alice -> Bob: message 2
+Bob --> Alice: ok
+||45||
+Alice -> Bob: message 3
+Bob --> Alice: ok
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-28.svg]]
+
+** Lifeline Activation and Destruction
+The *activate* and *deactivate* are used to denote participant activation.
+
+Once a participant is activated, its lifeline appears.
+
+The *activate* and *deactivate* apply on the previous message.
+
+The destroy denote the end of the lifeline of a participant.
+
+#+begin_src plantuml :output-dir images :file seq-29.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+participant User
+User -> A: DoWork
+activate A
+
+A -> B: << createRequest >>
+activate B
+
+B -> C: DoWork
+activate C
+
+C --> B: WorkDone
+destroy C
+
+B --> A: RequestCreated
+deactivate B
+
+A -> User: Done
+deactivate A
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-29.svg]]
+
+Nested lifeline can be used, and it is possible to add a color on the lifeline.
+
+#+begin_src plantuml :output-dir images :file seq-30.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+participant User
+
+User -> A: DoWork
+activate A #FFBBBB
+
+A -> A: Internal call
+activate A #DarkSalmon
+
+A -> B: << createRequest >>
+activate B
+
+B --> A: RequestCreated
+deactivate B
+deactivate A
+
+A -> User: Done
+deactivate A
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-30.svg]]
+
+*autoactivation* is possible and works with the *return* keywords:
+
+#+begin_src plantuml :output-dir images :file seq-31.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+autoactivate on
+alice -> bob : hello
+bob -> bob : self call
+bill -> bob #005500 : hello from thread 2
+bob -> george ** : create
+return done in thread 2
+return rc
+bob -> george !! : delete
+return success
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-31.svg]]
+
+** Return
+Command *return* generates a return message with optional text label.
+
+The return point is that which caused the most recent life-line activation.
+
+The syntax is *return label* where *label* if provided is any string acceptable for conventional messages.
+
+#+begin_src plantuml :output-dir images :file seq-32.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+Bob -> Alice : hello
+activate Alice
+Alice -> Alice : some action
+return bye
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-32.svg]]
+
+** Participant creation
+You can use the *create* keyword just before the first reception of a
+message to emphasize the fact that this message is actually creating
+this new object.
+
+#+begin_src plantuml :output-dir images :file seq-33.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+Bob -> Alice : hello
+
+create Other
+Alice -> Other : new
+
+create control String
+Alice -> String
+note right : You can also put notes!
+Alice --> Bob : ok
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-33.svg]]
+
+** Shortcut syntax for activation, deactivation, creation
+Immediately after specifying the target participant, the following syntax can be used:
+- *++* Activate the target (optionally a #color may follow this)
+- *--* Deactivate the source
+- **** Create an instance of the target
+- *!!* Destroy an instance of the target
+
+#+begin_src plantuml :output-dir images :file seq-34.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+alice -> bob ++ : hello
+bob -> bob ++ : self call
+bob -> bib ++ #005500 : hello
+bob -> george ** : create
+return done
+return rc
+bob -> george !! : delete
+return success
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-34.svg]]
+
+Then you can mix activation and deactivation, on same line:
+
+#+begin_src plantuml :output-dir images :file seq-35.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+alice   -> bob     ++   : hello1
+bob     -> charlie --++ : hello2
+charlie --> alice  --   : ok
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-35.svg]]
+
+#+begin_src plantuml :output-dir images :file seq-36.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+alice -> bob   ++   #gold : hello
+bob   -> alice --++ #gold : you too
+alice -> bob   --         : step1
+alice -> bob              : step2
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-36.svg]]
+
+** Incoming and outgoing messages
+You can use incoming or outgoing arrows if you want to focus on a part
+of the diagram.
+
+Use square brackets to denote the left "[" or the right "]" side of
+the diagram.
+
+#+begin_src plantuml :output-dir images :file seq-37.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+[-> A: DoWork
+activate A
+A -> A: Internal call
+activate A
+A ->] : << createRequest >>
+A<--] : RequestCreated
+deactivate A
+[<- A: Done
+deactivate A
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-37.svg]]
+
+You can also have the following syntax:
+
+#+begin_src plantuml :output-dir images :file seq-38.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+participant Alice
+participant Bob #lightblue
+Alice -> Bob
+Bob -> Carol
+...
+[-> Bob
+[o-> Bob
+[o->o Bob
+[x-> Bob
+...
+[<- Bob
+[x<- Bob
+...
+Bob ->]
+Bob ->o]
+Bob o->o]
+Bob ->x]
+...
+Bob <-]
+Bob x<-]
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-38.svg]]
+** Short arrows for incoming and outgoing messages
+You can have short arrows with using ?.
+
+#+begin_src plantuml :output-dir images :file seq-39.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+?-> Alice    : ""?->""\n**short**  to actor1
+[-> Alice    : ""[->""\n**from start**  to actor1
+[-> Bob      : ""[->""\n**from start**  to actor2
+?-> Bob      : ""?->""\n**short**  to actor2
+Alice ->]    : ""->]""\nfrom actor1 **to end**
+Alice ->?    : ""->?""\n**short** from actor1
+Alice -> Bob : ""->"" \nfrom actor1 to actor2
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-39.svg]]
+
+** Anchors and Duration
+With *teoz* usage it is possible to add anchors to the diagram and use
+the anchors to specify duration time.
+
+#+begin_src plantuml :output-dir images :file seq-40.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+!pragma teoz true
+{start} Alice -> Bob : start doing things during duration
+Bob -> Max : something
+Max -> Bob : something else
+{end} Bob -> Alice : finish
+{start} <-> {end} : some time
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-40.svg]]
+
+** Stereotypes and Spots
+It is possible to add stereotypes to participants using << and >>.
+
+In the stereotype, you can add a spotted character in a colored circle using the syntax (X,color).
+
+#+begin_src plantuml :output-dir images :file seq-41.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+participant "Famous Bob" as Bob << Generated >>
+participant Alice << (C,#ADD1B2) Testable >>
+
+Bob->Alice: First message
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-41.svg]]
+
+By default, the /guillemet character/ is used to display the
+stereotype. You can change this behavious using the skinparam
+*guillemet*:
+
+#+begin_src plantuml :output-dir images :file seq-42.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+skinparam guillemet false
+participant "Famous Bob" as Bob << Generated >>
+participant Alice << (C,#ADD1B2) Testable >>
+
+Bob->Alice: First message
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-42.svg]]
+
+#+begin_src plantuml :output-dir images :file seq-43.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+participant Bob << (C,#ADD1B2) >>
+participant Alice << (C,#ADD1B2) >>
+
+Bob->Alice: First message
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-43.svg]]
+
+** More information on titles
+You can use creole formatting in the title.
+
+#+begin_src plantuml :output-dir images :file seq-44.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+title __Simple__ **communication** example
+Alice -> Bob: Authentication Request
+Bob -> Alice: Authentication Response
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-44.svg]]
+
+You can add newline using in the title description.
+
+#+begin_src plantuml :output-dir images :file seq-45.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+title __Simple__ communication example\non several lines
+Alice -> Bob: Authentication Request
+Bob -> Alice: Authentication Response
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-45.svg]]
+
+You can also define title on several lines using *title* and *end title*
+keywords.
+
+#+begin_src plantuml :output-dir images :file seq-46.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+title
+<u>Simple</u> communication example
+on <i>several</i> lines and using <font color=red>html</font>
+This is hosted by <img:github.png>
+end title
+
+Alice -> Bob: Authentication Request
+Bob -> Alice: Authentication Response
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-46.svg]]
+
+** Participants encompass
+It is possible to draw a box around some participants, using box and
+end box commands.
+
+You can add an optional title or a optional background color, after
+the box keyword.
+
+#+begin_src plantuml :output-dir images :file seq-47.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+box "Internal Service" #LightBlue
+participant Bob
+participant Alice
+end box
+
+participant Other
+Bob -> Alice : hello
+Alice -> Other : hello
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-47.svg]]
+
+** Removing Foot Boxes
+You can use the *hide footbox* keywords to remove the foot boxes of the
+diagram.
+
+#+begin_src plantuml :output-dir images :file 48.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+hide footbox
+title Foot Box removed
+Alice -> Bob: Authentication Request
+Bob --> Alice: Authentication Response
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/48.svg]]
+
+** Skinparam
+You can use the skinparam command to change colors and fonts for the drawing.
+
+You can use this command:
+- In the diagram definition, like any other commands,
+- In an included file,
+- In a configuration file, provided in the command line or the ANT task.
+
+You can also change other rendering parameter, as seen in the
+following examples:
+
+#+begin_src plantuml :output-dir images :file seq-49.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+skinparam sequenceParticipant underline
+actor User
+participant "First Class" as A
+participant "Second Class" as B
+participant "Last Class" as C
+User -> A: DoWork
+activate A
+A -> B: Create Request
+activate B
+B -> C: DoWork
+activate C
+C --> B: WorkDone
+destroy C
+B --> A: Request Created
+deactivate B
+A --> User: Done
+deactivate A
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-49.svg]]
+
+#+begin_src plantuml :output-dir images :file seq-50.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+skinparam backgroundColor #EEEBDC
+skinparam handwritten true
+skinparam sequence {
+ArrowColor DeepSkyBlue
+ActorBorderColor DeepSkyBlue
+LifeLineBorderColor blue
+LifeLineBackgroundColor #A9DCDF
+ParticipantBorderColor DeepSkyBlue
+ParticipantBackgroundColor DodgerBlue
+ParticipantFontName Impact
+ParticipantFontSize 17
+ParticipantFontColor #A9DCDF
+ActorBackgroundColor aqua
+ActorFontColor DeepSkyBlue
+ActorFontSize 17
+ActorFontName Aapex
+}
+actor User
+participant "First Class" as A
+participant "Second Class" as B
+participant "Last Class" as C
+User -> A: DoWork
+activate A
+A -> B: Create Request
+activate B
+B -> C: DoWork
+activate C
+C --> B: WorkDone
+destroy C
+B --> A: Request Created
+deactivate B
+A --> User: Done
+deactivate A
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-50.svg]]
+
+** Changing padding
+It is possible to tune some padding settings.
+
+#+begin_src plantuml :output-dir images :file seq-51.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+skinparam ParticipantPadding 20
+skinparam BoxPadding 10
+box "Foo1"
+participant Alice1
+participant Alice2
+end box
+box "Foo2"
+participant Bob1
+participant Bob2
+end box
+Alice1 -> Bob1 : hello
+Alice1 -> Out : out
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-51.svg]]
+
+** Appendix: Examples of all arrow type
+*** Normal arrow
+#+begin_src plantuml :output-dir images :file seq-52.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+participant Alice as a
+participant Bob   as b
+a ->     b : ""->   ""
+a ->>    b : ""->>  ""
+a -\     b : ""-\   ""
+a -\\    b : ""-\\\\""
+a -/     b : ""-/   ""
+a -//    b : ""-//  ""
+a ->x    b : ""->x  ""
+a x->    b : ""x->  ""
+a o->    b : ""o->  ""
+a ->o    b : ""->o  ""
+a o->o   b : ""o->o ""
+a <->    b : ""<->  ""
+a o<->o  b : ""o<->o""
+a x<->x  b : ""x<->x""
+a ->>o   b : ""->>o ""
+a -\o    b : ""-\o  ""
+a -\\o   b : ""-\\\\o""
+a -/o    b : ""-/o  ""
+a -//o   b : ""-//o ""
+a x->o   b : ""x->o ""
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-52.svg]]
+** Specific SkinParameter
+*** By default
+#+begin_src plantuml :output-dir images :file seq-53.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+Bob -> Alice : hello
+Alice -> Bob : ok
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-53.svg]]
+
+*** LifelineStrategy
+- *nosolid* (by default)
+
+#+begin_src plantuml :output-dir images :file seq-54.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+skinparam lifelineStrategy nosolid
+Bob -> Alice : hello
+Alice -> Bob : ok
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-54.svg]]
+
+- *solid*
+
+In order to have solid life line in sequence diagrams, you can use:
+*skinparam lifelineStrategy solid*
+
+#+begin_src plantuml :output-dir images :file seq-55.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+skinparam lifelineStrategy solid
+Bob -> Alice : hello
+Alice -> Bob : ok
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-55.svg]]
+
+*** style strictuml
+To be conform to strict UML (for arrow style: emits triangle rather than sharp arrowheads), you can use:
+- *skinparam style strictuml*
+
+#+begin_src plantuml :output-dir images :file 56.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+skinparam style strictuml
+Bob -> Alice : hello
+Alice -> Bob : ok
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/56.svg]]
+
+** Hide unlinked participant
+By default, all participants are displayed.
+
+#+begin_src plantuml :output-dir images :file seq-56.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+participant Alice
+participant Bob
+participant Carol
+Alice -> Bob : hello
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-56.svg]]
+
+But you can *hide unlinked* participant.
+
+#+begin_src plantuml :output-dir images :file seq-57.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+hide unlinked
+participant Alice
+participant Bob
+participant Carol
+Alice -> Bob : hello
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/seq-57.svg]]
+* Use Case Diagram
+Let's have a few examples:
+
+** Usecases
+Use cases are enclosed using between parentheses (because two
+parentheses looks like an oval).
+
+You can also use the *usecase* keyword to define a usecase. And you can
+define an alias, using the *as* keyword. This alias will be used later,
+when defining relations.
+
+#+begin_src plantuml :output-dir images :file uc-01.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+(First usecase)
+(Another usecase) as (UC2)
+usecase UC3
+usecase (Last\nusecase) as UC4
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/uc-01.svg]]
+
+** Actors
+The name defining an actor is enclosed between colons.
+
+You can also use the *actor* keyword to define an actor. An alias can be
+assigned using the *as* keyword and can be used later instead of the
+actor's name, e. g. when defining relations.
+
+You can see from the following examples, that the actor definitions
+are optional.
+
+#+begin_src plantuml :output-dir images :file uc-02.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+:First Actor:
+:Another\nactor: as Man2
+actor Woman3
+actor :Last actor: as Person1
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/uc-02.svg]]
+
+** Change Actor style
+You can change the actor style from stick man (by default) to:
+- an awesome man with the *skinparam actorStyle awesome* command;
+- a hollow man with the *skinparam actorStyle hollow* command.
+
+*** Stick man (by default)
+
+#+begin_src plantuml :output-dir images :file uc-03.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+:User: --> (Use)
+"Main Admin" as Admin
+"Use the application" as (Use)
+Admin --> (Admin the application)
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/uc-03.svg]]
+
+*** Awesome man
+#+begin_src plantuml :output-dir images :file uc-04.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+skinparam actorStyle awesome
+:User: --> (Use)
+"Main Admin" as Admin
+"Use the application" as (Use)
+Admin --> (Admin the application)
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/uc-04.svg]]
+
+*** Hollow man
+#+begin_src plantuml :output-dir images :file uc-05.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+skinparam actorStyle hollow
+:User: --> (Use)
+"Main Admin" as Admin
+"Use the application" as (Use)
+Admin --> (Admin the application)
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/uc-05.svg]]
+
+** Usecases description
+If you want to have a description spanning several lines, you can use
+quotes.  You can also use the following separators:
+- -- (dashes)
+- .. (periods)
+- == (equals)
+- __ (underscores)
+
+By using them pairwise and enclosing text between them, you can
+created separators with titles.
+
+#+begin_src plantuml :output-dir images :file uc-06.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+usecase UC1 as "You can use
+several lines to define your usecase.
+You can also use separators.
+--
+Several separators are possible.
+==
+And you can add titles:
+..Conclusion..
+This allows large description."
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/uc-06.svg]]
+
+** Use package
+You can use packages to group actors or use cases.
+
+#+begin_src plantuml :output-dir images :file uc-07.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+left to right direction
+actor Guest as g
+package Professional {
+actor Chef as c
+actor "Food Critic" as fc
+}
+package Restaurant {
+usecase "Eat Food" as UC1
+usecase "Pay for Food" as UC2
+usecase "Drink" as UC3
+usecase "Review" as UC4
+}
+fc --> UC4
+g --> UC1
+g --> UC2
+g --> UC3
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/uc-07.svg]]
+
+You can use *rectangle* to change the display of the package.
+
+#+begin_src plantuml :output-dir images :file uc-08.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+left to right direction
+actor "Food Critic" as fc
+rectangle Restaurant {
+usecase "Eat Food" as UC1
+usecase "Pay for Food" as UC2
+usecase "Drink" as UC3
+}
+fc --> UC1
+fc --> UC2
+fc --> UC3
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/uc-08.svg]]
+
+** Basic example
+To link actors and use cases, the arrow *-->* is used.
+
+The more dashes *-* in the arrow, the longer the arrow. You can add a label on the arrow, by adding a *:*
+
+character in the arrow definition.  In this example, you see that /User/
+has not been defined before, and is used as an actor.
+
+#+begin_src plantuml :output-dir images :file uc-09.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+User -> (Start)
+User --> (Use the application) : A small label
+
+:Main Admin: ---> (Use the application) : This is\nyet another\nlabel
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/uc-09.svg]]
+
+** Extension
+If one actor/use case extends another one, you can use the symbol *<|--*.
+
+#+begin_src plantuml :output-dir images :file uc-10.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+:Main Admin: as Admin
+(Use the application) as (Use)
+User <|-- Admin
+(Start) <|-- (Use)
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/uc-10.svg]]
+
+
+* Skinparam command
+** Text Alignment

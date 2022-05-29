@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="344px" preserveAspectRatio="none" style="width:273px;height:344px;background:#FFFFFF;" version="1.1" viewBox="0 0 273 344" width="273px" zoomAndPan="magnify"><defs/><g><!--MD5=[fee662a292a0353a69bd162820bae93b]
+entity User--><g id="elem_User"><ellipse cx="20.5" cy="153" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/><path d="M20.5,161 L20.5,188 M7.5,169 L33.5,169 M20.5,188 L7.5,203 M20.5,188 L33.5,203 " fill="none" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="29" x="6" y="219.0332">User</text></g><g id="elem_Start"><ellipse cx="102.6985" cy="183.4517" fill="#F1F1F1" rx="32.6985" ry="15.4517" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="30" x="87.6985" y="187.1802">Start</text></g><g id="elem_Use the application"><ellipse cx="113.3351" cy="319.367" fill="#F1F1F1" rx="82.3351" ry="18.867" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="120" x="53.3351" y="323.0955">Use the application</text></g><!--MD5=[9d80a031e6d406631f1782a5e0bf8feb]
+entity Main Admin--><g id="elem_Main Admin"><ellipse cx="205.5" cy="14" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/><path d="M205.5,22 L205.5,49 M192.5,30 L218.5,30 M205.5,49 L192.5,64 M205.5,49 L218.5,64 " fill="none" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="73" x="169" y="80.0332">Main Admin</text></g><!--MD5=[f4b2be5085d6f52f3a0e36c62efcf3ad]
+link User to Start--><g id="link_User_Start"><path d="M35.23,183.5 C45.08,183.5 54.92,183.5 64.77,183.5 " fill="none" id="User-to-Start" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="69.92,183.5,60.92,179.5,64.92,183.5,60.92,187.5,69.92,183.5" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[d0b0c59f33bd08b0398cb18ab70d3659]
+link User to Use the application--><g id="link_User_Use the application"><path d="M35.03,205.44 C52.22,230.21 80.72,271.26 98.23,296.49 " fill="none" id="User-to-Use the application" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="101.15,300.71,99.3019,291.0361,98.298,296.6032,92.731,295.5993,101.15,300.71" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="75" x="79.5" y="266.9951">A small label</text></g><!--MD5=[84f62c86aeb01e7b0e45c962b4c6c2da]
+link Main Admin to Use the application--><g id="link_Main Admin_Use the application"><path d="M205.36,83.67 C203.68,130.41 195.79,210.71 163.5,270.5 C158,280.69 149.56,290 141.18,297.66 " fill="none" id="Main Admin-to-Use the application" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="137.08,301.28,146.4698,298.3082,140.8233,297.9653,141.1662,292.3188,137.08,301.28" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="38" x="214" y="172.4951">This is</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="65" x="200.5" y="188.8467">yet another</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="27" x="219.5" y="205.1982">label</text></g><!--MD5=[561ae7e24735033ded5adcdda9aefc7b]
+@startuml
+User -> (Start)
+User - -> (Use the application) : A small label
+
+:Main Admin: - - -> (Use the application) : This is\nyet another\nlabel
+@enduml
+
+PlantUML version 1.2022.3beta3(Unknown compile time)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>
