@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="219px" preserveAspectRatio="none" style="width:346px;height:219px;background:#FFFFFF;" version="1.1" viewBox="0 0 346 219" width="346px" zoomAndPan="magnify"><defs/><g><!--MD5=[fee662a292a0353a69bd162820bae93b]
+entity User--><g id="elem_User"><ellipse cx="36.5" cy="33.6855" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/><path d="M36.5,41.6855 L36.5,68.6855 M23.5,49.6855 L49.5,49.6855 M36.5,68.6855 L23.5,83.6855 M36.5,68.6855 L49.5,83.6855 " fill="none" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="29" x="22" y="99.7188">User</text><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="61" x="6" y="22.1094">«Human»</text></g><!--MD5=[2519f4b563146138a779359188ab3db5]
+entity MySql--><g id="elem_MySql"><ellipse cx="291.5" cy="33.6855" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/><path d="M291.5,41.6855 L291.5,68.6855 M278.5,49.6855 L304.5,49.6855 M291.5,68.6855 L278.5,83.6855 M291.5,68.6855 L304.5,83.6855 " fill="none" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="95" x="244" y="99.7188">Main Database</text><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="85" x="249" y="22.1094">«Application»</text></g><g id="elem_Start"><ellipse cx="155.5819" cy="55.0161" fill="#F1F1F1" rx="53.5819" ry="26.4399" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="76" x="117.5819" y="53.6549">«One Shot»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="30" x="140.5819" y="71.2642">Start</text></g><g id="elem_Use"><ellipse cx="163.2878" cy="188.0649" fill="#F1F1F1" rx="87.2878" ry="25.4887" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="47" x="134.169" y="181.0702">«Main»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="120" x="97.669" y="198.6795">Use the application</text></g><!--MD5=[f4b2be5085d6f52f3a0e36c62efcf3ad]
+link User to Start--><g id="link_User_Start"><path d="M67.18,55.0762 C76.97,55.0762 86.77,55.0762 96.56,55.0762 " fill="none" id="User-to-Start" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="101.68,55.0762,92.68,51.0762,96.68,55.0762,92.68,59.0762,101.68,55.0762" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[9b1e83a301d632e8d5a1d64f176fc1f5]
+link User to Use--><g id="link_User_Use"><path d="M67.24,87.7862 C88.53,109.7462 116.58,138.6762 136.9,159.6362 " fill="none" id="User-to-Use" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="140.6,163.4562,137.1948,154.2147,137.1148,159.871,131.4585,159.791,140.6,163.4562" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[4496f2e9342dd27c0c7444e31e731c8d]
+link MySql to Use--><g id="link_MySql_Use"><path d="M246.01,102.6262 C227.31,121.7762 206.29,143.2762 190.15,159.7962 " fill="none" id="MySql-to-Use" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="186.58,163.4562,195.7362,159.828,190.0796,159.8851,190.0225,154.2285,186.58,163.4562" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[7ff6bdbc1437905f81e5cfed3f7be6c8]
+@startuml
+User << Human >>
+database :Main Database: as MySql << Application >>
+(Start) << One Shot >>
+(Use the application) as (Use) << Main >>
+
+User -> (Start)
+User - -> (Use)
+MySql - -> (Use)
+@enduml
+
+PlantUML version 1.2022.3beta3(Unknown compile time)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

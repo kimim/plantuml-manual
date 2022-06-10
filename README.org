@@ -1584,5 +1584,149 @@ User <|-- Admin
 [[file:images/uc-10.svg]]
 
 
+** Using notes
+
+You can use the ~note left of~, ~note right of~, ~note top of~, ~note bottom
+of~ keywords to define notes related to a single object.
+
+A note can be also define alone with the ~note~ keywords, then linked to
+other objects using the ~..~ symbol.
+
+#+begin_src plantuml :output-dir images :file uc-11.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+:Main Admin: as Admin
+(Use the application) as (Use)
+
+User -> (Start)
+User --> (Use)
+Admin ---> (Use)
+note right of Admin : This is an example.
+note right of (Use)
+        A note can also
+        be on several lines
+end note
+note "This note is connected\nto several objects." as N2
+(Start) .. N2
+(Use) .u. N2
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/uc-11.svg]]
+
+** Stereotypes
+You can add stereotypes while defining actors and use cases using ~<<~
+and ~>>~.
+
+#+begin_src plantuml :output-dir images :file uc-12.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+User << Human >>
+:Main Database: as MySql << Application >>
+(Start) << One Shot >>
+(Use the application) as (Use) << Main >>
+
+User -> (Start)
+User --> (Use)
+MySql --> (Use)
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/uc-12.svg]]
+
+
+* Component Diagram
+** Components
+Components must be bracketed.
+
+You can also use the ~component~ keyword to define a component. And you
+can define an alias, using the ~as~ keyword. This alias will be used
+later, when defining relations.
+
+#+begin_src plantuml :output-dir images :file comp-01.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+[First component]
+[Another component] as Comp2
+component Comp3
+component [Last\ncomponent] as Comp4
+component "Real Last\ncomponent" as Comp5
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/comp-01.svg]]
+
+** Interfaces
+
+Interface can be defined using the ~()~ symbol (because this looks like
+a circle).
+
+You can also use the ~interface~ keyword to define an interface. And you
+can define an alias, using the ~as~ keyword. This alias will be used
+latter, when defining relations.
+
+We will see latter that interface definition is optional.
+
+#+begin_src plantuml :output-dir images :file comp-02.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+() "First Interface"
+() "Another interface" as Interf2
+interface Interf3
+interface "Last\ninterface" as Interf4
+[component]
+footer //Adding "component" to force diagram to be a **component diagram**//
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/comp-02.svg]]
+
+** Basic example
+
+Links between elements are made using combinations of dotted line
+(..), straight line (--), and arrows (-->) symbols.
+
+#+begin_src plantuml :output-dir images :file comp-03.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+DataAccess - [First Component]
+[First Component] ..> HTTP : use
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/comp-03.svg]]
+
+** Using notes
+You can use the ~note left of~, ~note right of~, ~note top of~, ~note bottom
+of~ keywords to define notes related to a single object.
+
+A note can be also define alone with the ~note~ keywords, then linked to
+other objects using the .. symbol.
+
+#+begin_src plantuml :output-dir images :file comp-04.svg :cmdline -headless -charset utf-8 :eval no-export :exports both
+@startuml
+interface "Data Access" as DA
+DA - [First Component]
+[First Component] ..> HTTP : use
+
+note left of HTTP : Web Service only
+note right of [First Component]
+        A note can also
+        be on several lines
+end note
+note "A new note, at right" as N1
+HTTP .r. N1
+@enduml
+#+end_src
+
+#+ATTR_LATEX: :scale 0.7
+#+RESULTS:
+[[file:images/comp-04.svg]]
+
 * Skinparam command
 ** Text Alignment
