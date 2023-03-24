@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="177px" preserveAspectRatio="none" style="width:131px;height:177px;background:#FFFFFF;" version="1.1" viewBox="0 0 131 177" width="131px" zoomAndPan="magnify"><defs/><g><rect fill="#FFC0CB" height="35.0938" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="46" x="33.5" y="54"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="26" x="43.5" y="76.457">error</text><polygon fill="#F1F1F1" points="32,10,81,10,93,22,81,34,32,34,20,22,32,10" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="49" x="32" y="26.501">condition?</text><rect fill="#98FB98" height="35.0938" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="53" x="30" y="131.0938"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="33" x="40" y="153.5508">action</text><line style="stroke:#181818;stroke-width:1.0;" x1="56.5" x2="56.5" y1="34" y2="54"/><polygon fill="#181818" points="52.5,44,56.5,54,60.5,44,56.5,48" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="93" x2="105" y1="22" y2="22"/><polygon fill="#181818" points="101,58.5469,105,68.5469,109,58.5469,105,62.5469" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="105" x2="105" y1="22" y2="111.0938"/><line style="stroke:#181818;stroke-width:1.0;" x1="105" x2="56.5" y1="111.0938" y2="111.0938"/><line style="stroke:#181818;stroke-width:1.0;" x1="56.5" x2="56.5" y1="111.0938" y2="131.0938"/><polygon fill="#181818" points="52.5,121.0938,56.5,131.0938,60.5,121.0938,56.5,125.0938" style="stroke:#181818;stroke-width:1.0;"/><!--MD5=[fd4afe491e7bd81d20ca5dee0a44d867]
+@startuml
+if (condition?) then
+#pink:error;
+detach
+endif
+#palegreen:action;
+@enduml
+
+PlantUML version 1.2022.3beta3(Unknown compile time)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: Cp1252
+Language: en
+Country: US
+--></g></svg>
