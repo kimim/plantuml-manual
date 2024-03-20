@@ -1,3 +1,6 @@
+:PROPERTIES:
+:ID:       c55d1cfd-8172-4e9f-ba4a-b08afd5bac14
+:END:
 #+TITLE: Drawing UML with PlantUML in Org
 #+SUBTITLE: PlantUML Language Reference Guide
 
@@ -1864,12 +1867,9 @@ endif
 @enduml
 #+end_src
 
+#+ATTR_LATEX: :scale 0.7
 #+RESULTS: ad-10
 [[file:images/ad-10.svg]]
-
-#+ATTR_LATEX: :scale 0.7
-#+RESULTS:
-[[file:images/.svg]]
 
 - ~detach~
   
